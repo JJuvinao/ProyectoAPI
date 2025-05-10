@@ -11,5 +11,6 @@ namespace PrimeraAPI.Models
         public DbSet<Clases> Clases { get; set; }
         public DbSet<Examenes> Examenes { get; set; }
         public DbSet<Profe_Clase> Profe_Clases { get; set; }
+        public DbSet<Clase_Exam> Clase_Exam { get; set; }
     }
 }
