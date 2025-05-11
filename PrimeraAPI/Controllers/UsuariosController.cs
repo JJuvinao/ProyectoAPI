@@ -137,6 +137,8 @@ namespace PrimeraAPI.Controllers
                 return Unauthorized("Contraseña incorrecta");
             }
 
+
+
             return Ok(new UsuarioDto(user.Id,user.Nombre,user.Rol,user.Correo));
         }
 
