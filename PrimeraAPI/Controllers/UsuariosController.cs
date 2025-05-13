@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
 
@@ -15,10 +19,12 @@ namespace PrimeraAPI.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly ContextDB _context;
+        private readonly IConfiguration _configuration;
 
-        public UsuariosController(ContextDB context)
+        public UsuariosController(ContextDB context, IConfiguration configuration)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         // GET: api/Usuarios
@@ -137,9 +143,33 @@ namespace PrimeraAPI.Controllers
                 return Unauthorized("Contraseña incorrecta");
             }
 
+            var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, user.Nombre),
+            new Claim(ClaimTypes.Role, user.Rol ?? "Usuario"),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Correo ?? string.Empty)
+        };
 
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            return Ok(new UsuarioDto(user.Id,user.Nombre,user.Rol,user.Correo));
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1), // Token válido por 1 hora
+                signingCredentials: creds);
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new
+            {
+                Token = tokenString,
+                ExpiresAt = token.ValidTo,
+                User = new { user.Id, user.Nombre, user.Rol, user.Correo }
+            });
+
         }
 
         // DELETE: api/Usuarios/5
