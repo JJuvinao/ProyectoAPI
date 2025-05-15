@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Examenes
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Examenes>>> GetExamenes()
         {
@@ -28,6 +30,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Examenes/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Examenes>> GetExamenes(int id)
         {
@@ -43,6 +46,7 @@ namespace PrimeraAPI.Controllers
 
         // PUT: api/Examenes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutExamenes(int id, Examenes examenes)
         {
@@ -74,6 +78,7 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Examenes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Examenes>> PostExamenes(Examenes examenes)
         {
@@ -84,6 +89,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // DELETE: api/Examenes/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExamenes(int id)
         {

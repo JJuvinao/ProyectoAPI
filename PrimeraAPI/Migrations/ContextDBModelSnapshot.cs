@@ -102,28 +102,6 @@ namespace PrimeraAPI.Migrations
                     b.ToTable("Examenes");
                 });
 
-            modelBuilder.Entity("PrimeraAPI.Models.Profe_Clase", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<DateTime>("fecha_creacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("id_clase")
-                        .HasColumnType("int");
-
-                    b.Property<int>("id_profesor")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Profe_Clases");
-                });
-
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")

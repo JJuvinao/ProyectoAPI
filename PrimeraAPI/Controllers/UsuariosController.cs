@@ -5,10 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PrimeraAPI.Helpers;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
 
@@ -19,15 +21,16 @@ namespace PrimeraAPI.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly ContextDB _context;
-        private readonly IConfiguration _configuration;
+        private readonly JwtHelper _jwtHelper;
 
-        public UsuariosController(ContextDB context, IConfiguration configuration)
+        public UsuariosController(ContextDB context, JwtHelper jwtHelper)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _jwtHelper = jwtHelper;
         }
 
         // GET: api/Usuarios
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -35,6 +38,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Usuarios/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
@@ -48,22 +52,9 @@ namespace PrimeraAPI.Controllers
             return usuario;
         }
 
-        [HttpGet("GetUsername/{nombre}")]
-        public async Task<ActionResult> GetUsername(string nombre)
-        {
-            try
-            {
-                var existeUsuario = await _context.Usuarios.AnyAsync(u => u.Nombre == nombre);
-                return existeUsuario ? Conflict() : Ok();
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
-        }
-
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
@@ -95,6 +86,7 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
@@ -128,6 +120,7 @@ namespace PrimeraAPI.Controllers
                 return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuarioDto);
             }
 
+        [Authorize]
         [HttpPost ("login")]
         public async Task<ActionResult<Usuario>> Login([FromBody] Usuario usuario)
         {
@@ -143,36 +136,19 @@ namespace PrimeraAPI.Controllers
                 return Unauthorized("Contraseña incorrecta");
             }
 
-            var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, user.Nombre),
-            new Claim(ClaimTypes.Role, user.Rol ?? "Usuario"),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Correo ?? string.Empty)
-        };
+            var token = _jwtHelper.GenerateToken(user);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), // Token válido por 1 hora
-                signingCredentials: creds);
-
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
             return Ok(new
             {
-                Token = tokenString,
-                ExpiresAt = token.ValidTo,
+                Token = token,
                 User = new { user.Id, user.Nombre, user.Rol, user.Correo }
             });
 
         }
 
         // DELETE: api/Usuarios/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {

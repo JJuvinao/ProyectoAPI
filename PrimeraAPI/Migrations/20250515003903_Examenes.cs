@@ -31,12 +31,5 @@ namespace PrimeraAPI.Migrations
                    table.PrimaryKey("PK_Examenes", x => x.Id);
                });
         }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Examenes");
-        }
     }
 }
