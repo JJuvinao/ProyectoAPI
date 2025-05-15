@@ -6,24 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PrimeraAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Profe_Clase : Migration
+    public partial class Usuario : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.CreateTable(
-                name: "Profe_Clases",
+                name: "Usuarios",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    id_profesor = table.Column<int>(type: "int", nullable: false),
-                    id_clase = table.Column<int>(type: "int", nullable: false),
-                    fecha_creacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Contrasena = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Profe_Clases", x => x.id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
         }
 
@@ -31,7 +33,7 @@ namespace PrimeraAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Profe_Clases");
+                name: "Usuarios");
         }
     }
 }

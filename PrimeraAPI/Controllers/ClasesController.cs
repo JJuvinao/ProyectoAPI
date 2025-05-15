@@ -23,6 +23,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Clases
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Clases>>> GetClases()
         {
@@ -30,6 +31,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Clases/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Clases>> GetClases(int id)
         {
@@ -45,6 +47,7 @@ namespace PrimeraAPI.Controllers
 
         // PUT: api/Clases/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutClases(int id, Clases clases)
         {
@@ -76,6 +79,7 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Clases
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Clases>> PostClases(Clases clases)
         {
@@ -86,6 +90,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // DELETE: api/Clases/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClases(int id)
         {
