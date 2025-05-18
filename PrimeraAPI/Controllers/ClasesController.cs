@@ -12,7 +12,7 @@ namespace PrimeraAPI.Controllers
 {
     [Route("api/Clases")]
     [ApiController]
-    [Authorize]
+
     public class ClasesController : ControllerBase
     {
         private readonly ContextDB _context;
@@ -79,7 +79,7 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Clases
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
+        [Authorize (Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Clases>> PostClases(Clases clases)
         {

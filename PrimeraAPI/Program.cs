@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using PrimeraAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddScoped<JwtHelper>();
 
 // Configurar autenticación JWT
 builder.Services.AddAuthentication(options =>
@@ -82,7 +84,7 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "PrimeraAPI v1");
         // Asegúrate de que la ruta sea correcta
-        c.RoutePrefix = string.Empty; // Esto hace que Swagger esté en la raíz (por ejemplo, /swagger)
+        c.RoutePrefix = "swagger"; // Esto hace que Swagger esté en la raíz (por ejemplo, /swagger)
     });
 }
 
