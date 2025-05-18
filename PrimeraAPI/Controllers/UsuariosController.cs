@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using PrimeraAPI.Helpers;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
@@ -86,7 +77,6 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
@@ -120,32 +110,6 @@ namespace PrimeraAPI.Controllers
                 return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuarioDto);
             }
 
-        [Authorize]
-        [HttpPost ("login")]
-        public async Task<ActionResult<Usuario>> Login([FromBody] Usuario usuario)
-        {
-            var user = await _context.Usuarios
-         .FirstOrDefaultAsync(u => u.Nombre == usuario.Nombre);
-
-            if (user == null)
-            {
-                return Unauthorized("Usuario no encontrado");
-            }
-            if (!BCrypt.Net.BCrypt.Verify(usuario.Contrasena, user.Contrasena))
-            {
-                return Unauthorized("Contraseña incorrecta");
-            }
-
-            var token = _jwtHelper.GenerateToken(user);
-
-
-            return Ok(new
-            {
-                Token = token,
-                User = new { user.Id, user.Nombre, user.Rol, user.Correo }
-            });
-
-        }
 
         // DELETE: api/Usuarios/5
         [Authorize]

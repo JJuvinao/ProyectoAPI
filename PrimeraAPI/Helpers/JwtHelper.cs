@@ -19,23 +19,23 @@ namespace PrimeraAPI.Helpers
 
         public string GenerateToken(Usuario user)
         {
+            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
             var claims = new[]
         {
             new Claim(ClaimTypes.Name, user.Nombre),
-            new Claim(ClaimTypes.Role, user.Rol),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Role, user.Rol)
         };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1), // Token válido por 1 hora
-                signingCredentials: creds);
-
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256
+                )
+            );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
