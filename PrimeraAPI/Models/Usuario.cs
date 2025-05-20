@@ -1,11 +1,13 @@
-﻿namespace PrimeraAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace PrimeraAPI.Models
 {
     public class Usuario
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Contrasena { get; set; }
-        public string Rol { get; set; }
-        public string Correo { get; set; }
+    {   
+        [Key]
+        public int Id_Usuario { get; set; }
+        public string? Nombre { get; set; }
+        public string? Contrasena { get; set; }
+        public string? Rol { get; set; }
+        public string? Correo { get; set; }
     }
 }

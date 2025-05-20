@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrimeraAPI.Models;
 
@@ -11,9 +12,11 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    partial class ContextDBModelSnapshot : ModelSnapshot
+    [Migration("20250520044418_Juegos")]
+    partial class Juegos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,44 +73,6 @@ namespace PrimeraAPI.Migrations
                     b.HasKey("Id_Clase");
 
                     b.ToTable("Clases");
-                });
-
-            modelBuilder.Entity("PrimeraAPI.Models.Estudi_Clases", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("Id_Clase")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Id_Usuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Estudi_Clases");
-                });
-
-            modelBuilder.Entity("PrimeraAPI.Models.Estudi_Examen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("Id_Estudiane")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Id_Examen")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Estudi_Examenes");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Examenes", b =>
@@ -176,31 +141,6 @@ namespace PrimeraAPI.Migrations
                     b.HasKey("Id_Juego");
 
                     b.ToTable("Juegos");
-                });
-
-            modelBuilder.Entity("PrimeraAPI.Models.Productos", b =>
-                {
-                    b.Property<int>("Id_Producto")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Producto"));
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id_Categoria")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Precio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id_Producto");
-
-                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>

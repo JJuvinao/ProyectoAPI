@@ -50,7 +50,7 @@ namespace PrimeraAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutExamenes(int id, Examenes examenes)
         {
-            if (id != examenes.Id)
+            if (id != examenes.Id_Examen)
             {
                 return BadRequest();
             }
@@ -85,7 +85,7 @@ namespace PrimeraAPI.Controllers
             _context.Examenes.Add(examenes);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetExamenes", new { id = examenes.Id }, examenes);
+            return CreatedAtAction("GetExamenes", new { id = examenes.Id_Examen }, examenes);
         }
 
         // DELETE: api/Examenes/5
@@ -107,7 +107,7 @@ namespace PrimeraAPI.Controllers
 
         private bool ExamenesExists(int id)
         {
-            return _context.Examenes.Any(e => e.Id == id);
+            return _context.Examenes.Any(e => e.Id_Examen == id);
         }
     }
 }
