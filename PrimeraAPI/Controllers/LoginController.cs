@@ -41,7 +41,13 @@ namespace PrimeraAPI.Controllers
             return Ok(new
             {
                 token,
-                login.Id, login.Nombre, login.Rol, login.Correo
+                user = new UsuarioDto
+                {
+                    Id = login.Id_Usuario,
+                    Nombre = login.Nombre,
+                    Rol = login.Rol,
+                    Correo = login.Correo
+                }
             });
         }
     }

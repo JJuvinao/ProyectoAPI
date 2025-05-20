@@ -14,7 +14,7 @@ namespace PrimeraAPI.Migrations
                name: "Examenes",
                columns: table => new
                {
-                   Id = table.Column<int>(type: "int", nullable: false)
+                   Id_Examen = table.Column<int>(type: "int", nullable: false)
                        .Annotation("SqlServer:Identity", "1, 1"),
                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                    Tema = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -24,12 +24,20 @@ namespace PrimeraAPI.Migrations
                    Tiempo = table.Column<int>(type: "int", nullable: false),
                    Privacidad = table.Column<bool>(type: "bit", nullable: false),
                    Estado = table.Column<bool>(type: "bit", nullable: false),
-                   FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                   FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                   Id_Clase = table.Column<int>(type: "int", nullable: false),
+                   Id_Juego = table.Column<int>(type: "int", nullable: false)
                },
                constraints: table =>
                {
-                   table.PrimaryKey("PK_Examenes", x => x.Id);
+                   table.PrimaryKey("PK_Examenes", x => x.Id_Examen);
                });
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Examenes");
         }
     }
 }

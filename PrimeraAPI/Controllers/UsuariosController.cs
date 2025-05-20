@@ -49,7 +49,7 @@ namespace PrimeraAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
-            if (id != usuario.Id)
+            if (id != usuario.Id_Usuario)
             {
                 return BadRequest();
             }
@@ -101,13 +101,13 @@ namespace PrimeraAPI.Controllers
 
                 var usuarioDto = new UsuarioDto
                 {
-                    Id = usuario.Id,
+                    Id = usuario.Id_Usuario,
                     Nombre = usuario.Nombre,
                     Rol = usuario.Rol,
                     Correo = usuario.Correo
                 };
 
-                return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuarioDto);
+                return CreatedAtAction("GetUsuario", new { id = usuario.Id_Usuario }, usuarioDto);
             }
 
 
@@ -130,7 +130,7 @@ namespace PrimeraAPI.Controllers
 
         private bool UsuarioExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.Usuarios.Any(e => e.Id_Usuario == id);
         }
     }
 }
