@@ -12,7 +12,7 @@ namespace PrimeraAPI.Models
         public string? Codigo { get; set; }
         public int? Tiempo { get; set; }
         public bool Privacidad { get; set; }
-        public bool Estado { get; set; } = true;
+        public bool Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public int? Id_Clase { get; set; }
         public int? Id_Juego { get; set; }
