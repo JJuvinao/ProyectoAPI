@@ -37,17 +37,18 @@ namespace PrimeraAPI.Controllers
             }
 
             var token = _jwtHelper.GenerateToken(login);
+            var user = new UsuarioDto
+            {
+                Id = login.Id_Usuario,
+                Nombre = login.Nombre,
+                Rol = login.Rol,
+                Correo = login.Correo
+            };
 
             return Ok(new
             {
                 token,
-                user = new UsuarioDto
-                {
-                    Id = login.Id_Usuario,
-                    Nombre = login.Nombre,
-                    Rol = login.Rol,
-                    Correo = login.Correo
-                }
+                user
             });
         }
     }

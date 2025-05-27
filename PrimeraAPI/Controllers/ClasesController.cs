@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using PrimeraAPI.Models;
+using PrimeraAPI.ObjectDto;
 
 namespace PrimeraAPI.Controllers
 {
@@ -25,72 +22,86 @@ namespace PrimeraAPI.Controllers
         // GET: api/Clases
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Clases>>> GetClases()
+        public async Task<ActionResult<IEnumerable<ClasesDto>>> GetClases()
         {
-            return await _context.Clases.ToListAsync();
+            var clases = await _context.Clases.ToListAsync();
+            var clasedto = clases.Select(c => new ClasesDto
+            {
+                Nombre = c.Nombre,
+                Tema = c.Tema,
+                Autor = c.Autor,
+                Id_Profe = c.Id_Profe
+            }).ToList();
+
+            return Ok(clasedto);
         }
 
-        // GET: api/Clases/5
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Clases>> GetClases(int id)
+        // GET: api/Clases/ids
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
+        [HttpGet("ids")]
+        public async Task<ActionResult<Clases>> GetClases(List<int> ids)
         {
-            var clases = await _context.Clases.FindAsync(id);
+            var clases = await _context.Clases.ToListAsync();
 
             if (clases == null)
             {
-                return NotFound();
+                return NotFound("No hay clase disponible");
             }
 
-            return clases;
-        }
-
-        // PUT: api/Clases/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutClases(int id, Clases clases)
-        {
-            if (id != clases.Id_Clase)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(clases).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClasesExists(id))
+                var clasesFiltradas = new List<Clases>();
+                foreach (var id in ids)
+                {
+                    var clase = clases.FirstOrDefault(c => c.Id_Clase == id && c.Estado == true);
+                    if (clase != null)
+                    {
+                        clasesFiltradas.Add(clase);
+                    }
+                }
+                if (clasesFiltradas.Count == 0)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                return Ok(clasesFiltradas);
+        }
+
+        // GET: Clase/Profe_Clases/idprofe
+        [Authorize(Roles = "Admin, Profesor")]
+        [HttpGet("Profe_Clases/{idprofe}")]
+        public async Task<ActionResult<IEnumerable<Clases>>> GetProfe_Clases(int idprofe)
+        {
+            var IdClases = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
+
+            if (IdClases == null)
+            {
+                return NotFound("No hay clase disponible");
             }
 
-            return NoContent();
+            return IdClases;
         }
 
         // POST: api/Clases
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize (Roles = "Admin")]
+        [Authorize (Roles = "Admin, Profesor")]
         [HttpPost]
-        public async Task<ActionResult<Clases>> PostClases(Clases clases)
+        public async Task<ActionResult<Clases>> PostClases(ClasesDto clasesdto)
         {
+            var clases = new Clases
+            {
+                Nombre = clasesdto.Nombre,
+                Tema = clasesdto.Tema,
+                Autor = clasesdto.Autor,
+                Id_Profe = clasesdto.Id_Profe,
+                FechaCreacion = DateTime.Now
+            };
+
             _context.Clases.Add(clases);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetClases", new { id = clases.Id_Clase }, clases);
+            return Ok("Clase creada correctamente");
         }
 
         // DELETE: api/Clases/5
-        [Authorize]
+        [Authorize(Roles = "Admin, Profesor")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClases(int id)
         {
@@ -104,11 +115,6 @@ namespace PrimeraAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ClasesExists(int id)
-        {
-            return _context.Clases.Any(e => e.Id_Clase == id);
         }
     }
 }

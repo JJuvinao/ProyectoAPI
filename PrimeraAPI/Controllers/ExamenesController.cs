@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrimeraAPI.Models;
+using PrimeraAPI.ObjectDto;
 
 namespace PrimeraAPI.Controllers
 {
@@ -24,9 +25,26 @@ namespace PrimeraAPI.Controllers
         // GET: api/Examenes
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Examenes>>> GetExamenes()
+        public async Task<ActionResult<IEnumerable<ExamenDto>>> GetExamenes()
         {
-            return await _context.Examenes.ToListAsync();
+            var examen = await _context.Examenes.ToListAsync();
+            if (examen == null)
+            {
+                return NotFound("No se encontraron examenes disponibles.");
+            }
+
+            List<ExamenDto> examenesDto = new List<ExamenDto>();
+            foreach (var item in examen)
+            {
+                ExamenDto examenDto = new ExamenDto
+                {
+                    Id_Examen = item.Id_Examen,
+                    Nombre = item.Nombre,
+                    Tema = item.Tema
+                };
+                examenesDto.Add(examenDto);
+            }
+            return examenesDto;
         }
 
         // GET: api/Examenes/5

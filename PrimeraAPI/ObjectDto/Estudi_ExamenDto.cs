@@ -1,10 +1,14 @@
-﻿namespace PrimeraAPI.Models
+﻿namespace PrimeraAPI.ObjectDto
 {
-    public class Estudi_Examen
+    public class Estu_ExamDto
     {
-        public int Id { get; set; }
         public int? Id_Estudiane { get; set; }
         public int? Id_Examen { get; set; }
+    }
+
+    public class Estu_ExamFrom
+    {
+        public int Id { get; set; }
         public int? Puntaje { get; set; }
         public int? Aciertos { get; set; }
         public int? Fallos { get; set; }
