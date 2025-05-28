@@ -9,6 +9,7 @@ namespace PrimeraAPI.Models
         public string? Nombre { get; set; }
         public string? Genero { get; set; }
         public string? Tema { get; set; }
+        public bool? Estado { get; set; }
 
     }
 }
