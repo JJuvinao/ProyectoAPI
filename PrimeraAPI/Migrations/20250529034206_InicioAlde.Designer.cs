@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250520044454_Estudi_Clases")]
-    partial class Estudi_Clases
+    [Migration("20250529034206_InicioAlde")]
+    partial class InicioAlde
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,43 @@ namespace PrimeraAPI.Migrations
                     b.ToTable("Estudi_Clases");
                 });
 
+            modelBuilder.Entity("PrimeraAPI.Models.Estudi_Examen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Aciertos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Fallos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Id_Estudiane")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Id_Examen")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Nota")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("Puntaje")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Recomendacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Tiempo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estudi_Examenes");
+                });
+
             modelBuilder.Entity("PrimeraAPI.Models.Examenes", b =>
                 {
                     b.Property<int>("Id_Examen")
@@ -147,6 +184,9 @@ namespace PrimeraAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Juego"));
+
+                    b.Property<bool?>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Genero")
                         .HasColumnType("nvarchar(max)");

@@ -14,6 +14,7 @@ namespace PrimeraAPI.Models
         public bool Privacidad { get; set; }
         public bool Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public byte[]? ImagenExamen { get; set; }
         public int? Id_Clase { get; set; }
         public int? Id_Juego { get; set; }
     }
