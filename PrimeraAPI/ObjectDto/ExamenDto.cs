@@ -5,5 +5,6 @@
         public int Id_Examen { get; set; }
         public string? Nombre { get; set; }
         public string? Tema { get; set; }
+        public IFormFile ImagenExamen { get; set;}
     }
 }

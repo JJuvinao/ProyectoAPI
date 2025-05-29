@@ -61,6 +61,9 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Profe")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("ImagenClase")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,11 +102,29 @@ namespace PrimeraAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("Aciertos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Fallos")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Id_Estudiane")
                         .HasColumnType("int");
 
                     b.Property<int?>("Id_Examen")
                         .HasColumnType("int");
+
+                    b.Property<float?>("Nota")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("Puntaje")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Recomendacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Tiempo")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -139,6 +160,9 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Juego")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("ImagenExamen")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
@@ -164,6 +188,9 @@ namespace PrimeraAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Juego"));
 
+                    b.Property<bool?>("Estado")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Genero")
                         .HasColumnType("nvarchar(max)");
 
@@ -176,31 +203,6 @@ namespace PrimeraAPI.Migrations
                     b.HasKey("Id_Juego");
 
                     b.ToTable("Juegos");
-                });
-
-            modelBuilder.Entity("PrimeraAPI.Models.Productos", b =>
-                {
-                    b.Property<int>("Id_Producto")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Producto"));
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id_Categoria")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Precio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id_Producto");
-
-                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>
@@ -216,6 +218,9 @@ namespace PrimeraAPI.Migrations
 
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Imagen")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
