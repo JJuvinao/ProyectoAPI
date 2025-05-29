@@ -22,14 +22,19 @@ namespace PrimeraAPI.Controllers
         // GET: api/Clases
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClasesDto>>> GetClases()
+        public async Task<ActionResult<IEnumerable<ClasGet>>> GetClases()
         {
             var clases = await _context.Clases.ToListAsync();
-            var clasedto = clases.Select(c => new ClasesDto
+            var clasedto = clases.Select(c => new ClasGet
             {
+                Id_Clase = c.Id_Clase,
                 Nombre = c.Nombre,
                 Tema = c.Tema,
                 Autor = c.Autor,
+                Codigo = c.Codigo,
+                Estado = c.Estado,
+                FechaCreacion = c.FechaCreacion,
+                ImagenClase = c.ImagenClase != null ? Convert.ToBase64String(c.ImagenClase) : null,
                 Id_Profe = c.Id_Profe
             }).ToList();
 
@@ -67,7 +72,7 @@ namespace PrimeraAPI.Controllers
         // GET: Clase/Profe_Clases/idprofe
         [Authorize(Roles = "Admin, Profesor")]
         [HttpGet("Profe_Clases/{idprofe}")]
-        public async Task<ActionResult<IEnumerable<Clases>>> GetProfe_Clases(int idprofe)
+        public async Task<ActionResult<IEnumerable<ClasGet>>> GetProfe_Clases(int idprofe)
         {
             var IdClases = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
 
@@ -75,8 +80,20 @@ namespace PrimeraAPI.Controllers
             {
                 return NotFound("No hay clase disponible");
             }
+            var clasedto = IdClases.Select(c => new ClasGet
+            {
+                Id_Clase = c.Id_Clase,
+                Nombre = c.Nombre,
+                Tema = c.Tema,
+                Autor = c.Autor,
+                Codigo = c.Codigo,
+                Estado = c.Estado,
+                FechaCreacion = c.FechaCreacion,
+                ImagenClase = c.ImagenClase != null ? Convert.ToBase64String(c.ImagenClase) : null,
+                Id_Profe = c.Id_Profe
+            }).ToList();
 
-            return IdClases;
+            return Ok(clasedto);
         }
 
         // POST: api/Clases
@@ -93,6 +110,15 @@ namespace PrimeraAPI.Controllers
                 Id_Profe = clasesdto.Id_Profe,
                 FechaCreacion = DateTime.Now
             };
+
+            if (clasesdto.ImagenClase != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await clasesdto.ImagenClase.CopyToAsync(memoryStream);
+                    clases.ImagenClase = memoryStream.ToArray();
+                }
+            }
 
             _context.Clases.Add(clases);
             await _context.SaveChangesAsync();

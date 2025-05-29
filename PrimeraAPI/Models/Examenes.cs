@@ -10,8 +10,6 @@ namespace PrimeraAPI.Models
         public string? Autor { get; set; }
         public string? Descripcion { get; set; }
         public string? Codigo { get; set; }
-        public int? Tiempo { get; set; }
-        public bool Privacidad { get; set; }
         public bool Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public byte[]? ImagenExamen { get; set; }

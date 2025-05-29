@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PrimeraAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InicioAlde : Migration
+    public partial class nuevo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace PrimeraAPI.Migrations
                     Codigo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Estado = table.Column<bool>(type: "bit", nullable: true),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ImagenClase = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Id_Profe = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -88,10 +89,9 @@ namespace PrimeraAPI.Migrations
                     Autor = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Codigo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tiempo = table.Column<int>(type: "int", nullable: true),
-                    Privacidad = table.Column<bool>(type: "bit", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ImagenExamen = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Id_Clase = table.Column<int>(type: "int", nullable: true),
                     Id_Juego = table.Column<int>(type: "int", nullable: true)
                 },
@@ -125,7 +125,8 @@ namespace PrimeraAPI.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Contrasena = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rol = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Imagen = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

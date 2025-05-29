@@ -42,7 +42,8 @@ namespace PrimeraAPI.Controllers
                 Id = login.Id_Usuario,
                 Nombre = login.Nombre,
                 Rol = login.Rol,
-                Correo = login.Correo
+                Correo = login.Correo,
+                Imagen = login.Imagen != null ? Convert.ToBase64String(login.Imagen) : null
             };
 
             return Ok(new
