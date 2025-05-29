@@ -166,14 +166,8 @@ namespace PrimeraAPI.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Privacidad")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Tema")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Tiempo")
-                        .HasColumnType("int");
 
                     b.HasKey("Id_Examen");
 

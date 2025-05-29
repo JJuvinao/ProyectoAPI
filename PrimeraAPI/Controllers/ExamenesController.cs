@@ -25,7 +25,7 @@ namespace PrimeraAPI.Controllers
         // GET: api/Examenes
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExamenDto>>> GetExamenes()
+        public async Task<ActionResult<IEnumerable<ExamenGet>>> GetExamenes()
         {
             var examen = await _context.Examenes.ToListAsync();
             if (examen == null)
@@ -33,17 +33,18 @@ namespace PrimeraAPI.Controllers
                 return NotFound("No se encontraron examenes disponibles.");
             }
 
-            List<ExamenDto> examenesDto = new List<ExamenDto>();
-            foreach (var item in examen)
+            var examenesDto = examen.Select(e => new ExamenGet
             {
-                ExamenDto examenDto = new ExamenDto
-                {
-                    Id_Examen = item.Id_Examen,
-                    Nombre = item.Nombre,
-                    Tema = item.Tema
-                };
-                examenesDto.Add(examenDto);
-            }
+                Id_Examen = e.Id_Examen,
+                Nombre = e.Nombre,
+                Tema = e.Tema,
+                Autor = e.Autor,
+                Descripcion = e.Descripcion,
+                Codigo = e.Codigo,
+                FechaCreacion = e.FechaCreacion,
+                ImagenExamen = e.ImagenExamen != null ? Convert.ToBase64String(e.ImagenExamen) : null,
+                Id_Juego = e.Id_Juego
+            }).ToList();
             return examenesDto;
         }
 
@@ -98,12 +99,33 @@ namespace PrimeraAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Examenes>> PostExamenes(Examenes examenes)
+        public async Task<ActionResult<Examenes>> PostExamenes(ExamenDto examenes)
         {
-            _context.Examenes.Add(examenes);
+            var Examenes = new Examenes
+            {
+                Nombre = examenes.Nombre,
+                Tema = examenes.Tema,
+                Autor = examenes.Autor,
+                Descripcion = examenes.Descripcion,
+                Estado = true, 
+                FechaCreacion = DateTime.Now,
+                Id_Clase = examenes.Id_Clase,
+                Id_Juego = examenes.Id_Juego
+            };
+
+            if (examenes.ImagenExamen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await examenes.ImagenExamen.CopyToAsync(memoryStream);
+                    Examenes.ImagenExamen = memoryStream.ToArray();
+                }
+            }
+
+            _context.Examenes.Add(Examenes);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetExamenes", new { id = examenes.Id_Examen }, examenes);
+            return Ok("Examen creado con exito");
         }
 
         // DELETE: api/Examenes/5

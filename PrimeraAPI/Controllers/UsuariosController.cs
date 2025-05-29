@@ -20,12 +20,20 @@ namespace PrimeraAPI.Controllers
             _jwtHelper = jwtHelper;
         }
 
-        // GET: api/Usuarios
-        [Authorize]
+        [Authorize (Roles ="Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<UserDelete>>> GetUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
+            var usuario = await _context.Usuarios.ToListAsync();
+
+            var usuariosDto = usuario.Select(u => new UserDelete
+            {
+                Id = u.Id_Usuario,
+                Nombre = u.Nombre,
+                Rol = u.Rol
+            }).ToList();
+
+            return Ok(usuariosDto);
         }
 
         // GET: api/Usuarios/5
@@ -43,53 +51,39 @@ namespace PrimeraAPI.Controllers
             return usuario;
         }
 
-        // PUT: api/Usuarios/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
-        {
-            if (id != usuario.Id_Usuario)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(usuario).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<Usuario>> PostUsuario(UsuarioFrom usuarioDto)
         {
 
-                var existeUsuario = await _context.Usuarios.AnyAsync(u => u.Nombre == usuario.Nombre);
+                var existeUsuario = await _context.Usuarios.AnyAsync(u => u.Nombre == usuarioDto.Nombre);
                 if (existeUsuario)
                 {
                     return Conflict("Ya existe un usuario con ese nombre.");
                 }
 
-                usuario.Contrasena = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasena);
+                usuarioDto.Contrasena = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Contrasena);
 
-                try
+                var usuario = new Usuario
+                {
+                    Nombre = usuarioDto.Nombre,
+                    Contrasena = usuarioDto.Contrasena,
+                    Rol = usuarioDto.Rol,
+                    Correo = usuarioDto.Correo
+
+                };
+
+            if (usuarioDto.Imagen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await usuarioDto.Imagen.CopyToAsync(memoryStream);
+                    usuario.Imagen = memoryStream.ToArray();
+                }
+            }
+
+            try
                 {
                     _context.Usuarios.Add(usuario);
                     await _context.SaveChangesAsync();
@@ -98,16 +92,7 @@ namespace PrimeraAPI.Controllers
                 {
                     return StatusCode(500, "Error al guardar el usuario en la base de datos.");
                 }
-
-                var usuarioDto = new UsuarioDto
-                {
-                    Id = usuario.Id_Usuario,
-                    Nombre = usuario.Nombre,
-                    Rol = usuario.Rol,
-                    Correo = usuario.Correo
-                };
-
-                return CreatedAtAction("GetUsuario", new { id = usuario.Id_Usuario }, usuarioDto);
+                return Ok("Usuario registrado");
             }
 
 
@@ -119,13 +104,13 @@ namespace PrimeraAPI.Controllers
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
             {
-                return NotFound();
+                return NotFound("Usuario no existe");
             }
 
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Uusario eliminado");
         }
 
         private bool UsuarioExists(int id)

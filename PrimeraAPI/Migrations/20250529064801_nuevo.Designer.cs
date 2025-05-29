@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250529034206_InicioAlde")]
-    partial class InicioAlde
+    [Migration("20250529064801_nuevo")]
+    partial class nuevo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,9 @@ namespace PrimeraAPI.Migrations
 
                     b.Property<int?>("Id_Profe")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("ImagenClase")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
@@ -160,17 +163,14 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Juego")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("ImagenExamen")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Privacidad")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Tema")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Tiempo")
-                        .HasColumnType("int");
 
                     b.HasKey("Id_Examen");
 
@@ -215,6 +215,9 @@ namespace PrimeraAPI.Migrations
 
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Imagen")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
