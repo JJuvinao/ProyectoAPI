@@ -49,25 +49,24 @@ namespace PrimeraAPI.Controllers
 
 
         // POST: Estudi_Examen
-        [Authorize(Roles = "Estudiante")]
-        [HttpPost("IngresarExa/{id_Usuario}")]
-        public async Task<ActionResult> PostEstudi_Clase(string codigo, int id_Usuario)
+        [Authorize]
+        [HttpPost("IngresarExa")]
+        public async Task<ActionResult<Estu_ExamFrom>> PostEstudi_Clase(Estu_ExamFrom estu_Exam)
         {
-            if (!EstudiExists(id_Usuario))
+            if (!EstudiExists(estu_Exam.Id_Estudiane))
                 return BadRequest("El estudiante no existe");
 
-            var examen = await _context.Examenes.FirstOrDefaultAsync(e => e.Codigo == codigo);
+            var examen = await _context.Examenes.FirstOrDefaultAsync(e => e.Id_Examen == estu_Exam.Id_Examen);
             if (examen == null)
                 return NotFound("Codigo de clase ínvalido o inexistente");
 
             var estudi_exam = new Estudi_Examen
             {
-                Id_Estudiane = id_Usuario,
+                Id_Estudiane = estu_Exam.Id_Estudiane,
                 Id_Examen = examen.Id_Examen,
-                Puntaje = null,
-                Aciertos = null,
-                Fallos = null,
-                Tiempo = null,
+                Intentos = estu_Exam.Intentos,
+                Aciertos = estu_Exam.Aciertos,
+                Fallos = estu_Exam.Fallos,
                 Nota = null,
                 Recomendacion = null
             };

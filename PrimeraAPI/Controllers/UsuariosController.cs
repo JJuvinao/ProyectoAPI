@@ -20,7 +20,7 @@ namespace PrimeraAPI.Controllers
             _jwtHelper = jwtHelper;
         }
 
-        [Authorize (Roles ="Admin")]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDelete>>> GetUsuarios()
         {
@@ -101,7 +101,6 @@ namespace PrimeraAPI.Controllers
 
 
         // DELETE: api/Usuarios/5
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
