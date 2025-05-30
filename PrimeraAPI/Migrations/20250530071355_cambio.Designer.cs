@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250529064801_nuevo")]
-    partial class nuevo
+    [Migration("20250530071355_cambio")]
+    partial class cambio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,8 +64,8 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Profe")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ImagenClase")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ImagenClase")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
