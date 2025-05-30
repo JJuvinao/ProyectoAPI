@@ -77,5 +77,47 @@ namespace PrimeraAPI.Controllers
 
             return Ok("Ingreso a la clase exitoso");
         }
+
+        //[Authorize(Roles = "Profesor")]
+        //[HttpPut("Calificar/{id_Usuario}")]
+        //public async Task<ActionResult> PutCalificar(Estu_ExamPut estu_Exam, int id_Usuario)
+        //{
+        //    var eventoExistente = await _context.Eventos.FindAsync(id);
+        //    if (eventoExistente == null)
+        //    {
+        //        return NotFound("Evento no existe");
+        //    }
+
+        //    eventoExistente.Nombre_Evento = evento.Nombre_Evento;
+        //    eventoExistente.Descripcion = evento.Descripcion;
+        //    eventoExistente.Nombre_Lugar = evento.Nombre_Lugar;
+        //    eventoExistente.Direccion_Lugar = evento.Direccion_Lugar;
+        //    eventoExistente.Aforo_Max = evento.Aforo_Max;
+        //    eventoExistente.PrecioTicket = evento.PrecioTicket;
+        //    eventoExistente.Tickets_Disponible = evento.Tickets_Disponible;
+        //    eventoExistente.Estado = evento.Estado;
+        //    eventoExistente.Categoria = evento.Categoria;
+
+
+        //    _context.Entry(eventoExistente).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!EventoExists(id))
+        //        {
+        //            return NotFound("Fallo la modificacion en base de datos");
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return Ok("Modificado");
+        //}
     }
 }
