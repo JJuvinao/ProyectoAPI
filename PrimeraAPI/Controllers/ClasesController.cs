@@ -74,13 +74,13 @@ namespace PrimeraAPI.Controllers
         [HttpGet("Profe_Clases/{idprofe}")]
         public async Task<ActionResult<IEnumerable<ClasGet>>> GetProfe_Clases(int idprofe)
         {
-            var IdClases = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
+            var ClasesProfesor = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
 
-            if (IdClases == null)
+            if (ClasesProfesor == null)
             {
                 return NotFound("No hay clase disponible");
             }
-            var clasedto = IdClases.Select(c => new ClasGet
+            var clasedto = ClasesProfesor.Select(c => new ClasGet
             {
                 Id_Clase = c.Id_Clase,
                 Nombre = c.Nombre,
@@ -102,13 +102,17 @@ namespace PrimeraAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Clases>> PostClases(ClasesDto clasesdto)
         {
-            var clases = new Clases
+            string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
+            var clase = new Clases
             {
                 Nombre = clasesdto.Nombre,
                 Tema = clasesdto.Tema,
                 Autor = clasesdto.Autor,
+                Codigo = codigo,
+                Estado = true,
+                FechaCreacion = DateTime.Now,
                 Id_Profe = clasesdto.Id_Profe,
-                FechaCreacion = DateTime.Now
             };
 
             if (clasesdto.ImagenClase != null)
@@ -116,11 +120,11 @@ namespace PrimeraAPI.Controllers
                 using (var memoryStream = new MemoryStream())
                 {
                     await clasesdto.ImagenClase.CopyToAsync(memoryStream);
-                    clases.ImagenClase = memoryStream.ToArray();
+                    clase.ImagenClase = memoryStream.ToArray();
                 }
             }
 
-            _context.Clases.Add(clases);
+            _context.Clases.Add(clase);
             await _context.SaveChangesAsync();
 
             return Ok("Clase creada correctamente");

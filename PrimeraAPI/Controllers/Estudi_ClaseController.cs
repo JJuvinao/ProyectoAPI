@@ -21,14 +21,14 @@ namespace PrimeraAPI.Controllers
 
         // GET: Estudi_Clase/IDUser
         [Authorize(Roles = "Admin, Profesor, Estudiante")]
-        [HttpGet ("{IDUser}")]
-        public async Task<ActionResult<Clases>> GetId_Clases(int IDUser)
+        [HttpGet ("{id_User}")]
+        public async Task<ActionResult<Clases>> GetUserClases(int id_User)
         {
-            if (EstudiExists(IDUser))
+            if (EstudiExists(id_User))
             {
                 var clases = await _context.Clases.ToListAsync();
                 var clasesFiltradas = new List<Clases>();
-                List<int> IdClasesList = ClasesList(IDUser);
+                List<int> IdClasesList = ClasesList(id_User);
                 foreach (var id in IdClasesList)
                 {
                     var clase = clases.FirstOrDefault(c => c.Id_Clase == id && c.Estado == true);
@@ -63,22 +63,35 @@ namespace PrimeraAPI.Controllers
         }
 
         // POST: Estudi_Clase
-        [Authorize(Roles = "Admin, Profesor, Estudiante")]
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<Estudi_Clases>>> PostEstudi_Clase(Estu_ClasDto estu_Clasdto)
+        [Authorize(Roles = "Estudiante")]
+        [HttpPost("Ingresar/{id_Usuario}")]
+        public async Task<ActionResult> PostEstudi_Clase(string codigo, int id_Usuario)
         {
-            var estudi_Clase = new Estudi_Clases
-            {
-                Id_Usuario = estu_Clasdto.Id_Usuario,
-                Id_Clase = estu_Clasdto.Id_Clase
+            if (!EstudiExists(id_Usuario))
+                return BadRequest("El estudiante no existe");
+
+            var clase = await _context.Clases.FirstOrDefaultAsync(clase => clase.Codigo == codigo);
+            if (clase == null)
+                return NotFound("Codigo de clase ínvalido o inexistente");
+
+            if (EstudianteEnClase(id_Usuario, clase.Id_Clase))
+                return BadRequest("El estudiante ya se encuentra en la clase");
+
+            var estudi_clase = new Estudi_Clases{
+                Id_Usuario = id_Usuario,
+                Id_Clase = clase.Id_Clase
             };
 
-
-            _context.Estudi_Clases.Add(estudi_Clase);
+            _context.Estudi_Clases.Add(estudi_clase);
             await _context.SaveChangesAsync();
-            return Ok("Guardado");
+
+            return Ok("Ingreso a la clase exitoso");
         }
 
+        private bool EstudianteEnClase(int id_Usuario, int id_Clase)
+        {
+            return _context.Estudi_Clases.Any(e => e.Id_Usuario == id_Usuario && e.Id_Clase == id_Clase);
+        }
 
         private bool EstudiExists(int id)
         {

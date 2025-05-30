@@ -10,7 +10,7 @@ namespace PrimeraAPI.Models
         public string? Tema { get; set; }
         public string? Autor { get; set; }
         public string? Codigo { get; set; }
-        public bool? Estado { get; set; } = true;
+        public bool? Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public byte[]? ImagenClase { get; set; }
         public int? Id_Profe { get; set; }
