@@ -97,5 +97,25 @@ namespace PrimeraAPI.Controllers
         {
             return _context.Usuarios.Any(e => e.Id_Usuario == id);
         }
+
+        [Authorize(Roles = "Admin, Profesor")]
+        [HttpGet("EstudiantesClase/{id_Clase}")]
+        public async Task<ActionResult<IEnumerable<UsuarioShow>>> ClaseUsers(int id_Clase)
+        {
+            var relacionesClases = await _context.Estudi_Clases.Where(e => e.Id_Clase == id_Clase).ToListAsync();
+            if (relacionesClases == null)
+                return NotFound("No hay estudiantes en esta clase");
+
+            var idsUsuarios = relacionesClases.Select(e => e.Id_Usuario).Distinct().ToList();
+
+            var estudiantes = await _context.Usuarios.Where(u => idsUsuarios.Contains(u.Id_Usuario))
+                .Select(u => new UsuarioShow
+                {
+                    Id = u.Id_Usuario,
+                    Nombre = u.Nombre
+                }).ToListAsync();
+
+            return estudiantes;
+        }
     }
 }
