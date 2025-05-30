@@ -12,7 +12,7 @@ namespace PrimeraAPI.Models
         public string? Codigo { get; set; }
         public bool? Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
-        public byte[]? ImagenClase { get; set; }
+        public string? ImagenClase { get; set; }
         public int? Id_Profe { get; set; }
     }
 }
