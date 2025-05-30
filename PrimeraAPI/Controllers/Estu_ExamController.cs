@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
@@ -48,34 +49,33 @@ namespace PrimeraAPI.Controllers
 
 
         // POST: Estudi_Examen
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<Estu_ExamFrom>>> PostEstudi_Examen(Estu_ExamDto estu_ExamDto)
+        [Authorize(Roles = "Estudiante")]
+        [HttpPost("IngresarExa/{id_Usuario}")]
+        public async Task<ActionResult> PostEstudi_Clase(string codigo, int id_Usuario)
         {
-            if (estu_ExamDto == null)
-            {
-                return BadRequest("Datos inválidos");
-            }
+            if (!EstudiExists(id_Usuario))
+                return BadRequest("El estudiante no existe");
 
-            var estu_Examen = await _context.Estudi_Examenes
-                .Where(e => e.Id_Estudiane == estu_ExamDto.Id_Estudiane
-                && e.Id_Examen == estu_ExamDto.Id_Examen)
-                .FirstOrDefaultAsync();
+            var examen = await _context.Examenes.FirstOrDefaultAsync(e => e.Codigo == codigo);
+            if (examen == null)
+                return NotFound("Codigo de clase ínvalido o inexistente");
 
-            if (estu_Examen != null)
+            var estudi_exam = new Estudi_Examen
             {
-                return NotFound("Ya existe un registro del estudiantes en este examen");
-            }
-
-            var newExamen = new Estudi_Examen
-            {
-                Id_Estudiane = estu_ExamDto.Id_Estudiane,
-                Id_Examen = estu_ExamDto.Id_Examen
+                Id_Estudiane = id_Usuario,
+                Id_Examen = examen.Id_Examen,
+                Puntaje = null,
+                Aciertos = null,
+                Fallos = null,
+                Tiempo = null,
+                Nota = null,
+                Recomendacion = null
             };
 
-            _context.Estudi_Examenes.Add(newExamen);
+            _context.Estudi_Examenes.Add(estudi_exam);
             await _context.SaveChangesAsync();
-            return Ok("Guardado correctamente");
 
+            return Ok("Ingreso a la clase exitoso");
         }
     }
 }
