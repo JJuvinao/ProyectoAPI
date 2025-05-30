@@ -35,7 +35,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id_Categoria");
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Clases", b =>
@@ -72,7 +72,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id_Clase");
 
-                    b.ToTable("Clases");
+                    b.ToTable("Clases", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Estudi_Clases", b =>
@@ -91,7 +91,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estudi_Clases");
+                    b.ToTable("Estudi_Clases", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Estudi_Examen", b =>
@@ -128,7 +128,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estudi_Examenes");
+                    b.ToTable("Estudi_Examenes", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Examenes", b =>
@@ -171,7 +171,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id_Examen");
 
-                    b.ToTable("Examenes");
+                    b.ToTable("Examenes", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Juegos", b =>
@@ -196,7 +196,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id_Juego");
 
-                    b.ToTable("Juegos");
+                    b.ToTable("Juegos", (string)null);
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>
@@ -224,7 +224,7 @@ namespace PrimeraAPI.Migrations
 
                     b.HasKey("Id_Usuario");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 #pragma warning restore 612, 618
         }

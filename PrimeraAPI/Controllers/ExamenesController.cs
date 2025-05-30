@@ -101,12 +101,15 @@ namespace PrimeraAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Examenes>> PostExamenes(ExamenDto examenes)
         {
+            string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
             var Examenes = new Examenes
             {
                 Nombre = examenes.Nombre,
                 Tema = examenes.Tema,
                 Autor = examenes.Autor,
                 Descripcion = examenes.Descripcion,
+                Codigo = codigo,
                 Estado = true, 
                 FechaCreacion = DateTime.Now,
                 Id_Clase = examenes.Id_Clase,

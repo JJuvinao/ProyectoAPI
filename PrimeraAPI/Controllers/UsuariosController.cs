@@ -82,8 +82,12 @@ namespace PrimeraAPI.Controllers
                     usuario.Imagen = memoryStream.ToArray();
                 }
             }
+            else
+            {
+                return NotFound("Errror en la imagen");
+            }
 
-            try
+                try
                 {
                     _context.Usuarios.Add(usuario);
                     await _context.SaveChangesAsync();

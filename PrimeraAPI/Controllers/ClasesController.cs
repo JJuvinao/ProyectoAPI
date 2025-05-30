@@ -1,4 +1,4 @@
-﻿    using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -74,13 +74,13 @@ namespace PrimeraAPI.Controllers
         [HttpGet("Profe_Clases/{idprofe}")]
         public async Task<ActionResult<IEnumerable<ClasGet>>> GetProfe_Clases(int idprofe)
         {
-            var IdClases = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
+            var ClasesProfesor = await _context.Clases.Where(e => e.Id_Profe == idprofe).ToListAsync();
 
-            if (IdClases == null)
+            if (ClasesProfesor == null)
             {
                 return NotFound("No hay clase disponible");
             }
-            var clasedto = IdClases.Select(c => new ClasGet
+            var clasedto = ClasesProfesor.Select(c => new ClasGet
             {
                 Id_Clase = c.Id_Clase,
                 Nombre = c.Nombre,
@@ -102,6 +102,8 @@ namespace PrimeraAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Clases>> PostClases(ClasesDto clasesdto)
         {
+            string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
             if (clasesdto == null)
             {
                 return NotFound("Clase vacia");
@@ -112,8 +114,10 @@ namespace PrimeraAPI.Controllers
                 Nombre = clasesdto.Nombre,
                 Tema = clasesdto.Tema,
                 Autor = clasesdto.Autor,
-                Id_Profe = clasesdto.Id_Profe,
+                Codigo = codigo,
+                Estado = true,
                 FechaCreacion = DateTime.Now,
+                Id_Profe = clasesdto.Id_Profe,
                 ImagenClase = clasesdto.ImagenClase
             };
 
