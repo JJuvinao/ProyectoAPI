@@ -152,5 +152,30 @@ namespace PrimeraAPI.Controllers
         {
             return _context.Examenes.Any(e => e.Id_Examen == id);
         }
+
+        [Authorize]
+        [HttpGet("ExamenesClase/{id_Clase}")]
+        public async Task<ActionResult<IEnumerable<ExamenGet>>> GetExamenesClase(int id_Clase)
+        {
+            var examenes = await _context.Examenes.Where(e => e.Id_Clase == id_Clase).ToListAsync();
+            if (examenes == null)
+            {
+                return NotFound("No se encontraron examenes disponibles.");
+            }
+
+            var examenesDto = examenes.Select(e => new ExamenGet
+            {
+                Id_Examen = e.Id_Examen,
+                Nombre = e.Nombre,
+                Tema = e.Tema,
+                Autor = e.Autor,
+                Descripcion = e.Descripcion,
+                Codigo = e.Codigo,
+                FechaCreacion = e.FechaCreacion,
+                ImagenExamen = e.ImagenExamen != null ? Convert.ToBase64String(e.ImagenExamen) : null,
+                Id_Juego = e.Id_Juego
+            }).ToList();
+            return examenesDto;
+        }
     }
 }
