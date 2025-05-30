@@ -1,4 +1,5 @@
-﻿namespace PrimeraAPI.ObjectDto
+﻿
+namespace PrimeraAPI.ObjectDto
 {
     public class ExamenDto
     {
