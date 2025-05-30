@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿    using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -34,7 +34,7 @@ namespace PrimeraAPI.Controllers
                 Codigo = c.Codigo,
                 Estado = c.Estado,
                 FechaCreacion = c.FechaCreacion,
-                ImagenClase = c.ImagenClase != null ? Convert.ToBase64String(c.ImagenClase) : null,
+                ImagenClase = c.ImagenClase,
                 Id_Profe = c.Id_Profe
             }).ToList();
 
@@ -89,7 +89,7 @@ namespace PrimeraAPI.Controllers
                 Codigo = c.Codigo,
                 Estado = c.Estado,
                 FechaCreacion = c.FechaCreacion,
-                ImagenClase = c.ImagenClase != null ? Convert.ToBase64String(c.ImagenClase) : null,
+                ImagenClase = c.ImagenClase,
                 Id_Profe = c.Id_Profe
             }).ToList();
 
@@ -98,32 +98,29 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Clases
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize (Roles = "Admin, Profesor")]
+        [Authorize(Roles = "Admin, Profesor")]
         [HttpPost]
         public async Task<ActionResult<Clases>> PostClases(ClasesDto clasesdto)
         {
+            if (clasesdto == null)
+            {
+                return NotFound("Clase vacia");
+            }
+
             var clases = new Clases
             {
                 Nombre = clasesdto.Nombre,
                 Tema = clasesdto.Tema,
                 Autor = clasesdto.Autor,
                 Id_Profe = clasesdto.Id_Profe,
-                FechaCreacion = DateTime.Now
+                FechaCreacion = DateTime.Now,
+                ImagenClase = clasesdto.ImagenClase
             };
-
-            if (clasesdto.ImagenClase != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await clasesdto.ImagenClase.CopyToAsync(memoryStream);
-                    clases.ImagenClase = memoryStream.ToArray();
-                }
-            }
 
             _context.Clases.Add(clases);
             await _context.SaveChangesAsync();
 
-            return Ok("Clase creada correctamente");
+            return Ok($"Clase creada correctamente: {clases.Nombre}");
         }
 
         // DELETE: api/Clases/5
