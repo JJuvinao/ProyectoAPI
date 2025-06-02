@@ -1,7 +1,9 @@
 Esta API se ejecuta en Visual Studio Community
 link:https://visualstudio.microsoft.com/es/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&passive=false&cid=2030
 
+Para usar la API con VS Community tienes que intaslar Desarrollo de APS.Net Core, APS.NET, Desarrollo de escritorio .NET y Desarrollo de Node.js
 
+Ya teniendo el Visual Studio Community, solo tendra que descargar el .zip del proyecto, descomprimirlo una vez descargado y ejecutar el archivo .sln
 
 Para usar la API tendra que tener sqlserver ya instalado en su computadora.
 
