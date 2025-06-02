@@ -63,7 +63,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // POST: Estudi_Clase
-        [Authorize(Roles = "Estudiante")]
+        [Authorize]
         [HttpPost("Ingresar/{id_Usuario}")]
         public async Task<ActionResult> PostEstudi_Clase(string codigo, int id_Usuario)
         {
