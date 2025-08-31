@@ -157,8 +157,8 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Juego")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ImagenExamen")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ImagenExamen")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");

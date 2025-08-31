@@ -17,8 +17,9 @@ namespace PrimeraAPI.Controllers
             _context = context;
         }
 
-        // GET: Estudi_Examen/IDUser
-        [HttpGet("{IDUser}")]
+        // GET: Estudi_Examen/
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
+        [HttpPost("get_estu_exa")]
         public async Task<ActionResult<Estu_ExamFrom>> GetEstudi_Examen(Estu_ExamDto estu_ExamDto)
         {
             if (estu_ExamDto != null)
@@ -49,7 +50,7 @@ namespace PrimeraAPI.Controllers
 
 
         // POST: Estudi_Examen
-        [Authorize]
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
         [HttpPost("IngresarExa")]
         public async Task<ActionResult<Estu_ExamFrom>> PostEstudi_Clase(Estu_ExamFrom estu_Exam)
         {
@@ -88,10 +89,10 @@ namespace PrimeraAPI.Controllers
                 return NotFound();
             }
 
-            RelacionEstudiExam.Puntaje = estu_Exam.Puntaje;
+
             RelacionEstudiExam.Aciertos = estu_Exam.Aciertos;
             RelacionEstudiExam.Fallos = estu_Exam.Fallos;
-            RelacionEstudiExam.Tiempo = estu_Exam.Tiempo;
+
             RelacionEstudiExam.Nota = estu_Exam.Nota;
             RelacionEstudiExam.Recomendacion = estu_Exam.Recomendacion;
 

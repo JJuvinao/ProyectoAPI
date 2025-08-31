@@ -91,7 +91,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Habilitar CORS
-app.UseCors(permitir => permitir.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
+app.UseCors(permitir => permitir
+    .AllowAnyOrigin()    // ¡Permite todos los orígenes!
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 
 // Middleware de autenticación y autorización
 app.UseAuthentication();

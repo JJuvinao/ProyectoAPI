@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250530071355_cambio")]
-    partial class cambio
+    [Migration("20250827205105_Usuarios")]
+    partial class Usuarios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,17 +117,14 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Examen")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Intentos")
+                        .HasColumnType("int");
+
                     b.Property<float?>("Nota")
                         .HasColumnType("real");
 
-                    b.Property<int?>("Puntaje")
-                        .HasColumnType("int");
-
                     b.Property<string>("Recomendacion")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Tiempo")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -163,8 +160,8 @@ namespace PrimeraAPI.Migrations
                     b.Property<int?>("Id_Juego")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ImagenExamen")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ImagenExamen")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");

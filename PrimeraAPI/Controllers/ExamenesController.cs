@@ -42,7 +42,7 @@ namespace PrimeraAPI.Controllers
                 Descripcion = e.Descripcion,
                 Codigo = e.Codigo,
                 FechaCreacion = e.FechaCreacion,
-                ImagenExamen = e.ImagenExamen != null ? Convert.ToBase64String(e.ImagenExamen) : null,
+                ImagenExamen = e.ImagenExamen,
                 Id_Juego = e.Id_Juego
             }).ToList();
             return examenesDto;
@@ -112,18 +112,10 @@ namespace PrimeraAPI.Controllers
                 Codigo = codigo,
                 Estado = true, 
                 FechaCreacion = DateTime.Now,
+                ImagenExamen = examenes.ImagenExamen,
                 Id_Clase = examenes.Id_Clase,
                 Id_Juego = examenes.Id_Juego
             };
-
-            if (examenes.ImagenExamen != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await examenes.ImagenExamen.CopyToAsync(memoryStream);
-                    Examenes.ImagenExamen = memoryStream.ToArray();
-                }
-            }
 
             _context.Examenes.Add(Examenes);
             await _context.SaveChangesAsync();
@@ -172,7 +164,7 @@ namespace PrimeraAPI.Controllers
                 Descripcion = e.Descripcion,
                 Codigo = e.Codigo,
                 FechaCreacion = e.FechaCreacion,
-                ImagenExamen = e.ImagenExamen != null ? Convert.ToBase64String(e.ImagenExamen) : null,
+                ImagenExamen = e.ImagenExamen,
                 Id_Juego = e.Id_Juego
             }).ToList();
             return examenesDto;

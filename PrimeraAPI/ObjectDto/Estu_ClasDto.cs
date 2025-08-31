@@ -2,7 +2,8 @@
 {
     public class Estu_ClasDto
     {
-        public int? Id_Usuario { get; set; }
-        public int? Id_Clase { get; set; }
+        public int Id_Usuario { get; set; }
+        public int Id_Clase { get; set; }
+        public string? Codigo { get; set; }
     }
 }

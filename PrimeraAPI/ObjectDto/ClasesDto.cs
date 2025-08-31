@@ -6,7 +6,7 @@
         public string? Tema { get; set; }
         public string? Autor { get; set; }
         public string? ImagenClase { get; set; }
-        public int? Id_Profe { get; set; }
+        public int Id_Profe { get; set; }
     }
 
     public class ClasGet
