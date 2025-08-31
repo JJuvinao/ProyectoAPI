@@ -51,6 +51,20 @@ namespace PrimeraAPI.Controllers
             return usuario;
         }
 
+        [HttpGet("getname/{name}")]
+        public async Task<ActionResult<Usuario>> GetName(string name)
+        {
+            var usuario = await _context.Usuarios.FindAsync(name);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return usuario;
+        }
+
+
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

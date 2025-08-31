@@ -19,6 +19,13 @@ namespace PrimeraAPI.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<Clases>> GetEstudi_Clase()
+        {
+            var estudi_clases = await _context.Estudi_Clases.ToListAsync();
+            return Ok(estudi_clases);
+        }
+
         // GET: Estudi_Clase/IDUser
         [Authorize(Roles = "Admin, Profesor, Estudiante")]
         [HttpGet ("{id_User}")]
@@ -63,22 +70,22 @@ namespace PrimeraAPI.Controllers
         }
 
         // POST: Estudi_Clase
-        [Authorize(Roles = "Estudiante")]
-        [HttpPost("Ingresar/{id_Usuario}")]
-        public async Task<ActionResult> PostEstudi_Clase(string codigo, int id_Usuario)
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
+        [HttpPost("Ingresar")]
+        public async Task<ActionResult<Estu_ClasDto>> PostEstudi_Clase(Estu_ClasDto estu_ClasDto)
         {
-            if (!EstudiExists(id_Usuario))
+            if (!EstudiExists(estu_ClasDto.Id_Usuario))
                 return BadRequest("El estudiante no existe");
 
-            var clase = await _context.Clases.FirstOrDefaultAsync(clase => clase.Codigo == codigo);
+            var clase = await _context.Clases.FirstOrDefaultAsync(clase => clase.Codigo == estu_ClasDto.Codigo);
             if (clase == null)
                 return NotFound("Codigo de clase ínvalido o inexistente");
 
-            if (EstudianteEnClase(id_Usuario, clase.Id_Clase))
+            if (EstudianteEnClase(estu_ClasDto.Id_Usuario, clase.Id_Clase))
                 return BadRequest("El estudiante ya se encuentra en la clase");
 
             var estudi_clase = new Estudi_Clases{
-                Id_Usuario = id_Usuario,
+                Id_Usuario = estu_ClasDto.Id_Usuario,
                 Id_Clase = clase.Id_Clase
             };
 
@@ -98,6 +105,31 @@ namespace PrimeraAPI.Controllers
             return _context.Usuarios.Any(e => e.Id_Usuario == id);
         }
 
+
+        // POST: Estudi_Clase
+        [Authorize(Roles = "Admin, Profesor")]
+        [HttpPost("Profe_Clase")]
+        public async Task<ActionResult<Estu_ClasDto>> Postprofe_Clase(Estu_ClasDto estu_ClasDto)
+        {
+            var clase = await _context.Clases.FirstOrDefaultAsync(clase => clase.Codigo == estu_ClasDto.Codigo);
+            if (clase == null)
+                return NotFound("Codigo de clase ínvalido o inexistente");
+
+            if (EstudianteEnClase(estu_ClasDto.Id_Usuario, clase.Id_Clase))
+                return BadRequest("El estudiante ya se encuentra en la clase");
+
+            var estudi_clase = new Estudi_Clases
+            {
+                Id_Usuario = estu_ClasDto.Id_Usuario,
+                Id_Clase = clase.Id_Clase
+            };
+
+            _context.Estudi_Clases.Add(estudi_clase);
+            await _context.SaveChangesAsync();
+
+            return Ok("Ingreso a la clase exitoso");
+        }
+
         [Authorize(Roles = "Admin, Profesor")]
         [HttpGet("EstudiantesClase/{id_Clase}")]
         public async Task<ActionResult<IEnumerable<UsuarioShow>>> ClaseUsers(int id_Clase)
@@ -111,8 +143,9 @@ namespace PrimeraAPI.Controllers
             var estudiantes = await _context.Usuarios.Where(u => idsUsuarios.Contains(u.Id_Usuario))
                 .Select(u => new UsuarioShow
                 {
-                    Id = u.Id_Usuario,
-                    Nombre = u.Nombre
+                    Nombre = u.Nombre,
+                    Rol = u.Rol,
+                    Imagen = u.Imagen != null ? Convert.ToBase64String(u.Imagen) : null
                 }).ToListAsync();
 
             return estudiantes;

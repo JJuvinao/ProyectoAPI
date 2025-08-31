@@ -70,7 +70,7 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: Clase/Profe_Clases/idprofe
-        [Authorize(Roles = "Admin, Profesor")]
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
         [HttpGet("Profe_Clases/{idprofe}")]
         public async Task<ActionResult<IEnumerable<ClasGet>>> GetProfe_Clases(int idprofe)
         {
@@ -124,7 +124,14 @@ namespace PrimeraAPI.Controllers
             _context.Clases.Add(clases);
             await _context.SaveChangesAsync();
 
-            return Ok($"Clase creada correctamente: {clases.Nombre}");
+            var mesage = new Mensajes
+            {
+                Mensaje = "Clase creada correctamente",
+                Tipo = codigo            
+            };
+
+
+            return Ok(mesage);
         }
 
         // DELETE: api/Clases/5
