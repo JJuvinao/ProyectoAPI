@@ -9,6 +9,6 @@ namespace PrimeraAPI.Models
         public string? Contrasena { get; set; }
         public string? Rol { get; set; }
         public string? Correo { get; set; }
-        public byte[]? Imagen { get; set; }
+        public string? Imagen { get; set; }
     }
 }

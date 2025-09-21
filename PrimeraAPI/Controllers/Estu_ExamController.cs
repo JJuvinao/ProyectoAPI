@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
+using System.Linq;
 
 namespace PrimeraAPI.Controllers
 {
@@ -68,8 +69,8 @@ namespace PrimeraAPI.Controllers
                 Intentos = estu_Exam.Intentos,
                 Aciertos = estu_Exam.Aciertos,
                 Fallos = estu_Exam.Fallos,
-                Nota = null,
-                Recomendacion = null
+                Nota = estu_Exam.Notas,
+                Recomendacion = estu_Exam.Recomendaciones,
             };
 
             _context.Estudi_Examenes.Add(estudi_exam);
@@ -79,19 +80,15 @@ namespace PrimeraAPI.Controllers
         }
 
         [Authorize(Roles = "Profesor")]
-        [HttpPut("Calificar/{id_Usuario}")]
-        public async Task<ActionResult> PutCalificar(Estu_ExamPut estu_Exam, int id_Usuario)
+        [HttpPut("Calificar")]
+        public async Task<ActionResult> PutCalificar(Estu_ExamPut estu_Exam)
         {
             var RelacionEstudiExam = await _context.Estudi_Examenes
-                .FirstOrDefaultAsync(e => e.Id_Estudiane == id_Usuario && e.Id_Examen == estu_Exam.Id_Examen);
+                .FirstOrDefaultAsync(e => e.Id_Estudiane == estu_Exam.Id_estu && e.Id == estu_Exam.Id_estu_exa);
             if (RelacionEstudiExam == null)
             {
                 return NotFound();
             }
-
-
-            RelacionEstudiExam.Aciertos = estu_Exam.Aciertos;
-            RelacionEstudiExam.Fallos = estu_Exam.Fallos;
 
             RelacionEstudiExam.Nota = estu_Exam.Nota;
             RelacionEstudiExam.Recomendacion = estu_Exam.Recomendacion;
@@ -109,6 +106,68 @@ namespace PrimeraAPI.Controllers
             }
 
             return Ok("Calificación guardada");
+        }
+
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
+        [HttpGet("UsersExamen/{id_exam}")]
+        public async Task<ActionResult<UsuarioDto>> GetUsersclase(int id_exam)
+        {
+            if (ExamenExiste(id_exam))
+            {
+                var users = await _context.Usuarios.ToListAsync();
+                var listUsers = new List<Usuario>();
+                var usersfiltradas = new List<UsuarioDto>();
+                List<int> IdUserList = UsersList(id_exam);
+                foreach (var id in IdUserList)
+                {
+                    var user = users.FirstOrDefault(c => c.Id_Usuario == id);
+                    if (user != null)
+                    {
+                        listUsers.Add(user);
+                    }
+                }
+                if (listUsers.Count == 0)
+                {
+                    return NotFound("No hay usuarios disponible");
+                }
+
+                foreach (var user in listUsers)
+                {
+                    var userdto = new UsuarioDto
+                    {
+                        Id = user.Id_Usuario,
+                        Nombre = user.Nombre,
+                        Rol = user.Rol,
+                        Correo = user.Correo,
+                        Imagen = user.Imagen,
+                    };
+
+                    usersfiltradas.Add(userdto);
+                }
+
+                return Ok(usersfiltradas);
+            }
+            return NotFound("No existe la clase");
+        }
+        private bool ExamenExiste(int id)
+        {
+            return _context.Examenes.Any(e => e.Id_Clase == id);
+        }
+
+
+        private List<int> UsersList(int id)
+        {
+            var IdUsers = _context.Estudi_Examenes.Where(e => e.Id_Examen == id).ToList();
+            var IdUsersList = new List<int>();
+            foreach (var item in IdUsers)
+            {
+                if (item.Id_Estudiane != null)
+                {
+                    IdUsersList.Add((int)item.Id_Estudiane);
+                }
+            }
+            var Iduserslis = IdUsersList.Distinct().ToList();
+            return Iduserslis;
         }
     }
 }
