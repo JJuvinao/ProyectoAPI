@@ -28,6 +28,6 @@
         public string? Contrasena { get; set; }
         public string? Rol { get; set; }
         public string? Correo { get; set; }
-        public IFormFile? Imagen { get; set; }
+        public string? Imagen { get; set; }
     }
 }

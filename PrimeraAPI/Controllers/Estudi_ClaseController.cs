@@ -55,6 +55,47 @@ namespace PrimeraAPI.Controllers
            return NotFound("No existe el usuario");
         }
 
+        [Authorize(Roles = "Admin, Profesor, Estudiante")]
+        [HttpGet("usersclase/{id_clase}")]
+        public async Task<ActionResult<UsuarioDto>> GetUsersclase(int id_clase)
+        {
+            if (ClaseExists(id_clase))
+            {
+                var users = await _context.Usuarios.ToListAsync();
+                var listUsers = new List<Usuario>();
+                var usersfiltradas = new List<UsuarioDto>();
+                List<int> IdUserList = UsersList(id_clase);
+                foreach (var id in IdUserList)
+                {
+                    var user = users.FirstOrDefault(c => c.Id_Usuario == id);
+                    if (user != null)
+                    {
+                        listUsers.Add(user);
+                    }
+                }
+                if (listUsers.Count == 0)
+                {
+                    return NotFound("No hay clase disponible");
+                }
+
+                foreach (var user in listUsers)
+                {
+                    var userdto = new UsuarioDto
+                    {
+                        Id= user.Id_Usuario,
+                        Nombre = user.Nombre,
+                        Rol = user.Rol,
+                        Correo = user.Correo,                      
+                    };
+
+                    usersfiltradas.Add(userdto);
+                }
+
+                return Ok(usersfiltradas);
+            }
+            return NotFound("No existe la clase");
+        }
+
         private List<int> ClasesList(int id)
         {
             var IdClases = _context.Estudi_Clases.Where(e => e.Id_Usuario == id).ToList();
@@ -69,20 +110,34 @@ namespace PrimeraAPI.Controllers
             return IdClasesList;
         }
 
+        private List<int> UsersList(int id)
+        {
+            var IdUsers = _context.Estudi_Clases.Where(e => e.Id_Clase == id).ToList();
+            var IdUsersList = new List<int>();
+            foreach (var item in IdUsers)
+            {
+                if (item.Id_Usuario != null)
+                {
+                    IdUsersList.Add((int)item.Id_Usuario);
+                }
+            }
+            return IdUsersList;
+        }
+
         // POST: Estudi_Clase
         [Authorize(Roles = "Admin, Profesor, Estudiante")]
         [HttpPost("Ingresar")]
         public async Task<ActionResult<Estu_ClasDto>> PostEstudi_Clase(Estu_ClasDto estu_ClasDto)
         {
             if (!EstudiExists(estu_ClasDto.Id_Usuario))
-                return BadRequest("El estudiante no existe");
+                return NotFound("El estudiante no existe");
 
             var clase = await _context.Clases.FirstOrDefaultAsync(clase => clase.Codigo == estu_ClasDto.Codigo);
             if (clase == null)
                 return NotFound("Codigo de clase ínvalido o inexistente");
 
             if (EstudianteEnClase(estu_ClasDto.Id_Usuario, clase.Id_Clase))
-                return BadRequest("El estudiante ya se encuentra en la clase");
+                return NotFound("El estudiante ya se encuentra en la clase");
 
             var estudi_clase = new Estudi_Clases{
                 Id_Usuario = estu_ClasDto.Id_Usuario,
@@ -103,6 +158,11 @@ namespace PrimeraAPI.Controllers
         private bool EstudiExists(int id)
         {
             return _context.Usuarios.Any(e => e.Id_Usuario == id);
+        }
+
+        private bool ClaseExists(int id)
+        {
+            return _context.Clases.Any(e => e.Id_Clase == id);
         }
 
 
@@ -145,7 +205,7 @@ namespace PrimeraAPI.Controllers
                 {
                     Nombre = u.Nombre,
                     Rol = u.Rol,
-                    Imagen = u.Imagen != null ? Convert.ToBase64String(u.Imagen) : null
+                    Imagen = u.Imagen
                 }).ToListAsync();
 
             return estudiantes;

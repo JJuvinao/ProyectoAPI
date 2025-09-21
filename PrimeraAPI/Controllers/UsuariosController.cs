@@ -84,22 +84,10 @@ namespace PrimeraAPI.Controllers
                     Nombre = usuarioDto.Nombre,
                     Contrasena = usuarioDto.Contrasena,
                     Rol = usuarioDto.Rol,
-                    Correo = usuarioDto.Correo
+                    Correo = usuarioDto.Correo,
+                    Imagen = usuarioDto.Imagen,
 
                 };
-
-            if (usuarioDto.Imagen != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await usuarioDto.Imagen.CopyToAsync(memoryStream);
-                    usuario.Imagen = memoryStream.ToArray();
-                }
-            }
-            else
-            {
-                return NotFound("Errror en la imagen");
-            }
 
                 try
                 {
