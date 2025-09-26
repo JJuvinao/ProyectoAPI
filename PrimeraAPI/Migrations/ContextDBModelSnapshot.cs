@@ -171,6 +171,25 @@ namespace PrimeraAPI.Migrations
                     b.ToTable("Examenes");
                 });
 
+            modelBuilder.Entity("PrimeraAPI.Models.Juego_Examen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Codigo_Exa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre_Juego")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Juegos_Examenes");
+                });
+
             modelBuilder.Entity("PrimeraAPI.Models.Juegos", b =>
                 {
                     b.Property<int>("Id_Juego")
@@ -179,21 +198,68 @@ namespace PrimeraAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Juego"));
 
-                    b.Property<bool?>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Genero")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tema")
+                    b.Property<string>("Tipo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id_Juego");
 
                     b.ToTable("Juegos");
+                });
+
+            modelBuilder.Entity("PrimeraAPI.Models.Palabras_Ahorcado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Codigo_Exa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Palabra")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pista")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Palabras_Ahorcados");
+                });
+
+            modelBuilder.Entity("PrimeraAPI.Models.Preguntas_Heroes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Codigo_Exa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RespuestaF1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RespuestaF2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RespuestaF3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RespuestaV")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Preguntas_Heroes");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>

@@ -26,28 +26,6 @@ namespace PrimeraAPI.Controllers
             return Ok(await _context.Juegos.ToListAsync());
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Juegos>> PostJuegos(JuegoFrom juegofrom)
-        {
-            try
-            {
-                var juego = new Juegos
-                {
-                    Nombre = juegofrom.Nombre,
-                    Genero = juegofrom.Genero,
-                    Tema = juegofrom.Tema,
-                    Estado = true
-                };
-                _context.Juegos.Add(juego);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(500, "Error al guardar el juego en la base de datos.");
-            }
-            return Ok("Juego registrado");
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteJuegos(int id)
         {

@@ -20,7 +20,6 @@ namespace PrimeraAPI.Controllers
         }
 
         // GET: api/Clases
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClasGet>>> GetClases()
         {

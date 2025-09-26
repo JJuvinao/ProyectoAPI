@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PrimeraAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class clase : Migration
+    public partial class nuevastablas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,13 +106,58 @@ namespace PrimeraAPI.Migrations
                     Id_Juego = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Genero = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tema = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Estado = table.Column<bool>(type: "bit", nullable: true)
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Juegos", x => x.Id_Juego);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Juegos_Examenes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre_Juego = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Codigo_Exa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Juegos_Examenes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Palabras_Ahorcados",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Palabra = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pista = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Codigo_Exa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Palabras_Ahorcados", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Preguntas_Heroes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Pregunta = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RespuestaV = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RespuestaF1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RespuestaF2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RespuestaF3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Codigo_Exa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Preguntas_Heroes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +198,15 @@ namespace PrimeraAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Juegos");
+
+            migrationBuilder.DropTable(
+                name: "Juegos_Examenes");
+
+            migrationBuilder.DropTable(
+                name: "Palabras_Ahorcados");
+
+            migrationBuilder.DropTable(
+                name: "Preguntas_Heroes");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
