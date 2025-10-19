@@ -94,6 +94,7 @@ namespace PrimeraAPI.Controllers
             RelacionEstudiExam.Recomendacion = estu_Exam.Recomendacion;
 
 
+
             _context.Entry(RelacionEstudiExam).State = EntityState.Modified;
 
             try

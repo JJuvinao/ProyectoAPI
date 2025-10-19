@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 using PrimeraAPI.Models;
 using PrimeraAPI.ObjectDto;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace PrimeraAPI.Controllers
 {
