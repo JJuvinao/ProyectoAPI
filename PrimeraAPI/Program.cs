@@ -88,6 +88,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PrimeraAPI v1");
+    // Asegúrate de que la ruta sea correcta
+    c.RoutePrefix = "swagger"; // Esto hace que Swagger esté en la raíz (por ejemplo, /swagger)
+});
+
 app.UseHttpsRedirection();
 
 // Habilitar CORS

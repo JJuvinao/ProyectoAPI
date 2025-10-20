@@ -48,6 +48,54 @@ namespace PrimeraAPI.Controllers
             return examenesDto;
         }
 
+        [Authorize]
+        [HttpGet("GetAhorcado/{codigo}")]
+        public async Task<ActionResult<IEnumerable<ExamenGet>>> GetExamenes_Ahorcado(string codigo)
+        {
+            var exa_ahorcado = await _context.Palabras_Ahorcados.FirstOrDefaultAsync(e => e.Codigo_Exa == codigo);
+
+            if (exa_ahorcado == null) 
+            {
+                return NotFound("No se encontro el contenido del examen");
+            }
+
+            var ahorcado = new AhorcadoDto
+            {
+                Palabra = exa_ahorcado.Palabra,
+                Pista = exa_ahorcado.Pista,
+            };
+
+            return Ok(ahorcado);
+        }
+
+
+        [HttpGet("GetHeroes/{codigo}")]
+        public async Task<ActionResult<IEnumerable<ExamenGet>>> GetExamenes_Heroes(string codigo)
+        {
+            var exa_heroes = await _context.Preguntas_Heroes.Where(e => e.Codigo_Exa == codigo).ToListAsync();
+
+            if (exa_heroes == null)
+            {
+                return NotFound("No se encontro el contenido del examen");
+            }
+
+            var heroeslist = new List<Preg_HeroesDto>();
+            foreach (var exa in exa_heroes) 
+            {
+                var heroes = new Preg_HeroesDto
+                {
+                    Pregunta = exa.Pregunta,
+                    RespuestaV = exa.RespuestaV,
+                    RespuestaF1 = exa.RespuestaF1,
+                    RespuestaF2 = exa.RespuestaF2,
+                    RespuestaF3 = exa.RespuestaF3
+                };
+                heroeslist.Add(heroes);
+            }
+
+            return Ok(heroeslist);
+        }
+
         // GET: api/Examenes/5
         [Authorize]
         [HttpGet("{id}")]
@@ -65,7 +113,6 @@ namespace PrimeraAPI.Controllers
 
         // PUT: api/Examenes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutExamenes(int id, Examenes examenes)
         {
@@ -84,7 +131,7 @@ namespace PrimeraAPI.Controllers
             {
                 if (!ExamenesExists(id))
                 {
-                    return NotFound();
+                    return NotFound("no existe el examne");
                 }
                 else
                 {
@@ -95,11 +142,11 @@ namespace PrimeraAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Examenes
+        // POST: api/Examenes/Ahorcado
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult<Examenes>> PostExamenes(ExamenDto examenes)
+
+        [HttpPost("Ahorcado")]
+        public async Task<ActionResult<Examenes>> PostExamenes_Ahorcado(Examen_AhorcadoDto examenes)
         {
             string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
 
@@ -118,10 +165,73 @@ namespace PrimeraAPI.Controllers
             };
 
             _context.Examenes.Add(Examenes);
-            await _context.SaveChangesAsync();
 
+            if (!string.IsNullOrEmpty(examenes.Palabra) && !string.IsNullOrEmpty(examenes.Pista))
+            {
+                var ahoracado = new Palabras_Ahorcado
+                {
+                    Palabra = examenes.Palabra,
+                    Pista = examenes.Pista,
+                    Codigo_Exa = codigo,
+                };
+                _context.Palabras_Ahorcados.Add(ahoracado);
+            }
+            await _context.SaveChangesAsync();
             return Ok("Examen creado con exito");
         }
+
+        // POST: api/Examenes/Heroes
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
+        [HttpPost("Heroes")]
+        public async Task<ActionResult<Examenes>> PostExamenes_Heroes(Examen_HeroesDto examenes)
+        {
+            string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+
+            var Examenes = new Examenes
+            {
+                Nombre = examenes.Nombre,
+                Tema = examenes.Tema,
+                Autor = examenes.Autor,
+                Descripcion = examenes.Descripcion,
+                Codigo = codigo,
+                Estado = true,
+                FechaCreacion = DateTime.Now,
+                ImagenExamen = examenes.ImagenExamen,
+                Id_Clase = examenes.Id_Clase,
+                Id_Juego = examenes.Id_Juego
+            };
+
+            _context.Examenes.Add(Examenes);
+                if (examenes.Heroes != null)
+                {
+                    var listheroe = new List<Preguntas_Heroes>();
+                    foreach (var her in examenes.Heroes)
+                    {
+                        var Pr_Heroe = new Preguntas_Heroes
+                        {
+                            Pregunta = her.Pregunta,
+                            RespuestaV = her.RespuestaV,
+                            RespuestaF1 = her.RespuestaF1,
+                            RespuestaF2 = her.RespuestaF2,
+                            RespuestaF3 = her.RespuestaF3,
+                            Codigo_Exa = codigo,
+                        };
+                        listheroe.Add(Pr_Heroe);
+                    }
+                    if (listheroe.Count > 0)
+                    {
+                        for (int i = 0; i < listheroe.Count; i++)
+                        {
+                            _context.Preguntas_Heroes.Add(listheroe[i]);
+
+                        }
+                    }
+                }
+            await _context.SaveChangesAsync();
+            return Ok("Examen creado con exito");
+        }
+
 
         // DELETE: api/Examenes/5
         [Authorize]

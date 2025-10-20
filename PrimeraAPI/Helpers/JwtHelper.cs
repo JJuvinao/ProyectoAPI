@@ -30,7 +30,7 @@ namespace PrimeraAPI.Helpers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), // Token válido por 1 hora
+                expires: DateTime.UtcNow.AddHours(5),
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256

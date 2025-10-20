@@ -97,8 +97,8 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Clases
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Admin, Profesor")]
-        [HttpPost]
+
+        [HttpPost("ClasePost")]
         public async Task<ActionResult<Clases>> PostClases(ClasesDto clasesdto)
         {
             string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
