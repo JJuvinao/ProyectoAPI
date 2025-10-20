@@ -79,7 +79,7 @@ namespace PrimeraAPI.Controllers
             return Ok("Ingreso a la clase exitoso");
         }
 
-        [Authorize(Roles = "Profesor")]
+
         [HttpPut("Calificar")]
         public async Task<ActionResult> PutCalificar(Estu_ExamPut estu_Exam)
         {
@@ -113,8 +113,6 @@ namespace PrimeraAPI.Controllers
         [HttpGet("UsersExamen/{id_exam}")]
         public async Task<ActionResult<UsuarioDto>> GetUsersclase(int id_exam)
         {
-            if (ExamenExiste(id_exam))
-            {
                 var users = await _context.Usuarios.ToListAsync();
                 var listUsers = new List<Usuario>();
                 var usersfiltradas = new List<UsuarioDto>();
@@ -129,7 +127,7 @@ namespace PrimeraAPI.Controllers
                 }
                 if (listUsers.Count == 0)
                 {
-                    return NotFound("No hay usuarios disponible");
+                    return Ok(new List<UsuarioDto>()); 
                 }
 
                 foreach (var user in listUsers)
@@ -147,8 +145,6 @@ namespace PrimeraAPI.Controllers
                 }
 
                 return Ok(usersfiltradas);
-            }
-            return NotFound("No existe la clase");
         }
         private bool ExamenExiste(int id)
         {

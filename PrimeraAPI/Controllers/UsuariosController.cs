@@ -67,7 +67,7 @@ namespace PrimeraAPI.Controllers
 
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("Registro")]
         public async Task<ActionResult<Usuario>> PostUsuario(UsuarioFrom usuarioDto)
         {
 

@@ -73,25 +73,21 @@ namespace PrimeraAPI.Controllers
                         listUsers.Add(user);
                     }
                 }
-                if (listUsers.Count == 0)
-                {
-                    return NotFound("No hay clase disponible");
-                }
-
-                foreach (var user in listUsers)
-                {
-                    var userdto = new UsuarioDto
+                    foreach (var user in listUsers)
                     {
-                        Id= user.Id_Usuario,
-                        Nombre = user.Nombre,
-                        Rol = user.Rol,
-                        Correo = user.Correo,                      
-                    };
+                        var userdto = new UsuarioDto
+                        {
+                            Id = user.Id_Usuario,
+                            Nombre = user.Nombre,
+                            Rol = user.Rol,
+                            Correo = user.Correo,
+                        };
 
-                    usersfiltradas.Add(userdto);
-                }
+                        usersfiltradas.Add(userdto);
+                    }
 
-                return Ok(usersfiltradas);
+                    return Ok(usersfiltradas);
+
             }
             return NotFound("No existe la clase");
         }
