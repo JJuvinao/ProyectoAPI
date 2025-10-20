@@ -46,4 +46,10 @@ namespace PrimeraAPI.ObjectDto
         public string response { get; set; }
         public bool Completed { get; set; }
     }
+
+    public class Request
+    {
+        public int Id_user { get; set; }
+        public string userRequest { get; set; }
+    }
 }

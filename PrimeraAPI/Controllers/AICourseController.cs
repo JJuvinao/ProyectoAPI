@@ -11,7 +11,7 @@ namespace PrimeraAPI.Controllers
         {
             _httpClient = httpClient;
             _httpClient.Timeout = TimeSpan.FromSeconds(300);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "API_KEY");
         }
 
         public async Task<string> GenerateCourseJson(string userRequest)

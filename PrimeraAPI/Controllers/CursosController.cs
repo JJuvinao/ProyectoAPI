@@ -33,8 +33,11 @@ namespace PrimeraAPI.Controllers
         }
 
         [HttpPost("AIGenerate")]
-        public async Task<IActionResult> PostCurso(int Id_user, string userRequest)
+        public async Task<IActionResult> PostCurso(Request request)
         {
+            int Id_user = request.Id_user;
+            string userRequest = request.userRequest;
+
             AICourseController aICourseController = new AICourseController(new HttpClient());
             var cursoJson = await aICourseController.GenerateCourseJson(userRequest);
             var curso = JsonSerializer.Deserialize<CursoDto>(cursoJson);
