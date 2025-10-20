@@ -16,7 +16,6 @@ namespace PrimeraAPI.Models
         public DbSet<Palabras_Ahorcado> Palabras_Ahorcados { get; set; }
         public DbSet<Preguntas_Heroes> Preguntas_Heroes { get; set; }
         public DbSet<Juego_Examen> Juegos_Examenes { get; set; }
-
-
+        public DbSet<Cursos> Cursos { get; set; }
     }
 }
