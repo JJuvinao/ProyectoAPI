@@ -24,17 +24,48 @@ namespace PrimeraAPI.Controllers
         public async Task<ActionResult<IEnumerable<CursoDto>>> Get(int Id_user)
         {
             var cursos = await _context.Cursos.ToListAsync();
-            if (cursos == null)
+            var cursos_user = cursos.Where(c => c.Id_user == Id_user).ToList();
+            if (cursos_user != null)
+            {
+                return Ok(_CursosDeserializer(cursos));
+            }
+
+            var Cursosflitardos = new List<Cursos>();
+            List<int> IdCursosList = Cursoslist(Id_user);
+            foreach (var id in IdCursosList)
+            {
+                var curso = cursos.FirstOrDefault(c => c.Id_curso == id);
+                if (curso != null)
+                {
+                    Cursosflitardos.Add(curso);
+                }
+            }
+
+            if (Cursosflitardos.Count == 0)
             {
                 return NotFound("No hay cursos");
             }
+            return Ok(_CursosDeserializer(Cursosflitardos));
+        }
 
-            return Ok(_CursosDeserializer(cursos));
+        private List<int> Cursoslist(int id)
+        {
+            var IdCurso = _context.User_Cursos.Where(e => e.Id_user == id).ToList();
+            var IdCursoList = new List<int>();
+            foreach (var item in IdCurso)
+            {
+                if (item.Id_curso != null)
+                {
+                    IdCursoList.Add((int)item.Id_curso);
+                }
+            }
+            return IdCursoList;
         }
 
         [HttpPost("AIGenerate")]
         public async Task<IActionResult> PostCurso(Request request)
         {
+            string codigo = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
             int Id_user = request.Id_user;
             string userRequest = request.userRequest;
 
@@ -48,13 +79,34 @@ namespace PrimeraAPI.Controllers
                 Num_sections = numSections,
                 Percentage = 0,
                 Completed = false,
-                Id_user = Id_user
+                Id_user = Id_user,
+                Codigo_Curso = codigo
             };
 
             _context.Cursos.Add(cursodb);
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpPost("Ingresar_Curso")]
+        public async Task<IActionResult> Ingresar_Curso(User_Cursodto usercurso)
+        {
+            var cursoExistente = await _context.Cursos.FirstOrDefaultAsync(c => c.Codigo_Curso == usercurso.Codigo);
+            if (cursoExistente == null)
+            {
+                return NotFound("Código de curso inválido");
+            }
+
+            var user_curso = new User_Cursos
+            {
+                Id_curso = cursoExistente.Id_curso,
+                Id_user = usercurso.Id_user
+            };
+            
+            _context.User_Cursos.Add(user_curso);
+            await _context.SaveChangesAsync();
+            return Ok("Curso ingresado correctamente");
         }
 
         [HttpDelete("{Id_course}")]
@@ -124,6 +176,7 @@ namespace PrimeraAPI.Controllers
                 cursoDto.Percentage = curso.Percentage;
                 cursoDto.Completed = curso.Completed;
                 cursoDto.Id_user = curso.Id_user;
+                cursoDto.Codigo = curso.Codigo_Curso;
                 cursosDto.Add(cursoDto);
             }
             return cursosDto;

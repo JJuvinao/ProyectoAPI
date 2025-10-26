@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250926031151_NombreDeLaMigracion")]
-    partial class NombreDeLaMigracion
+    [Migration("20251020193707_nuevo curso")]
+    partial class nuevocurso
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,34 @@ namespace PrimeraAPI.Migrations
                     b.HasKey("Id_Clase");
 
                     b.ToTable("Clases");
+                });
+
+            modelBuilder.Entity("PrimeraAPI.Models.Cursos", b =>
+                {
+                    b.Property<int>("Id_curso")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_curso"));
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Id_user")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Json_string")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Num_sections")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id_curso");
+
+                    b.ToTable("Cursos");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Estudi_Clases", b =>

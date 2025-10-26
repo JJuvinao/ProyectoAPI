@@ -10,5 +10,6 @@ namespace PrimeraAPI.Models
         public string? Rol { get; set; }
         public string? Correo { get; set; }
         public string? Imagen { get; set; }
+        public bool? Premium { get; set; }
     }
 }

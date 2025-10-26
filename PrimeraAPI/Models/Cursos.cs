@@ -11,5 +11,6 @@ namespace PrimeraAPI.Models
         public int Percentage { get; set; }
         public bool Completed { get; set; }
         public int Id_user { get; set; }
-    }
+        public string? Codigo_Curso { get; set; }
+        }
 }

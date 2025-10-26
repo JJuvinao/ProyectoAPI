@@ -12,8 +12,8 @@ using PrimeraAPI.Models;
 namespace PrimeraAPI.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250923051011_nuevastablas")]
-    partial class nuevastablas
+    [Migration("20251021033445_premium")]
+    partial class premium
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,6 @@ namespace PrimeraAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("PrimeraAPI.Models.Categorias", b =>
-                {
-                    b.Property<int>("Id_Categoria")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Categoria"));
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id_Categoria");
-
-                    b.ToTable("Categorias");
-                });
 
             modelBuilder.Entity("PrimeraAPI.Models.Clases", b =>
                 {
@@ -76,6 +60,34 @@ namespace PrimeraAPI.Migrations
                     b.HasKey("Id_Clase");
 
                     b.ToTable("Clases");
+                });
+
+            modelBuilder.Entity("PrimeraAPI.Models.Cursos", b =>
+                {
+                    b.Property<int>("Id_curso")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_curso"));
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Id_user")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Json_string")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Num_sections")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id_curso");
+
+                    b.ToTable("Cursos");
                 });
 
             modelBuilder.Entity("PrimeraAPI.Models.Estudi_Clases", b =>
@@ -284,6 +296,9 @@ namespace PrimeraAPI.Migrations
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Premium")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Rol")
                         .HasColumnType("nvarchar(max)");

@@ -143,13 +143,36 @@ namespace PrimeraAPI.Controllers
             var clases = await _context.Clases.FindAsync(id);
             if (clases == null)
             {
-                return NotFound();
+                return NotFound("clase no existe");
             }
 
             _context.Clases.Remove(clases);
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [Authorize(Roles = "Admin, Profesor")]
+        [HttpPut("UpdateClase")]
+        public async Task<IActionResult> UpdateClase(ClaseUpdate clasedto)
+        {
+            var clase = await _context.Clases.FindAsync(clasedto.Id_Clase);
+            if (clase == null)
+            {
+                return NotFound("clase no existe");
+            }
+
+            clase.Nombre = clasedto.Nombre;
+            clase.Tema = clasedto.Tema;
+            clase.Codigo = clasedto.Codigo;
+            clase.Estado = clasedto.Estado;
+            clase.ImagenClase = clasedto.ImagenClase;
+
+
+            _context.Entry(clase).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok("Clase actualizada");
         }
     }
 }

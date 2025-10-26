@@ -86,6 +86,7 @@ namespace PrimeraAPI.Controllers
                     Rol = usuarioDto.Rol,
                     Correo = usuarioDto.Correo,
                     Imagen = usuarioDto.Imagen,
+                    Premium = false,
 
                 };
 
@@ -118,9 +119,30 @@ namespace PrimeraAPI.Controllers
             return Ok("Uusario eliminado");
         }
 
-        private bool UsuarioExists(int id)
+        [Authorize]
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUsuario(UsuarioDto userdto)
         {
-            return _context.Usuarios.Any(e => e.Id_Usuario == id);
+            var usuario = await _context.Usuarios.FindAsync(userdto.Id);
+            if (usuario == null) { 
+                return NotFound("Usuario no existe");
+            }
+            if (usuario.Nombre == userdto.Nombre)
+            {
+                return Conflict("Nombre ya existente");
+            }
+
+            usuario.Nombre = userdto.Nombre;
+            usuario.Correo = userdto.Correo;
+            usuario.Imagen = userdto.Imagen;
+            usuario.Premium = userdto.Premium;
+
+
+            _context.Entry(usuario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok("Usuario actualizado");
         }
+
     }
 }

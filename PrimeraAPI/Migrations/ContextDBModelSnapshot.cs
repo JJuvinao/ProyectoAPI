@@ -67,6 +67,9 @@ namespace PrimeraAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_curso"));
 
+                    b.Property<string>("Codigo_Curso")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Completed")
                         .HasColumnType("bit");
 
@@ -274,6 +277,25 @@ namespace PrimeraAPI.Migrations
                     b.ToTable("Preguntas_Heroes");
                 });
 
+            modelBuilder.Entity("PrimeraAPI.Models.User_Cursos", b =>
+                {
+                    b.Property<int>("Id_User_Curso")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_User_Curso"));
+
+                    b.Property<int>("Id_curso")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id_user")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id_User_Curso");
+
+                    b.ToTable("User_Cursos");
+                });
+
             modelBuilder.Entity("PrimeraAPI.Models.Usuario", b =>
                 {
                     b.Property<int>("Id_Usuario")
@@ -293,6 +315,9 @@ namespace PrimeraAPI.Migrations
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Premium")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Rol")
                         .HasColumnType("nvarchar(max)");

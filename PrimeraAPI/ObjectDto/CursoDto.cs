@@ -6,10 +6,10 @@ namespace PrimeraAPI.ObjectDto
     {
         [JsonIgnore]
         public int Id_curso { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public List<Modulo> modules { get; set; }
-        public List<Pregunta> questions { get; set; }
+        public string? title { get; set; }
+        public string? description { get; set; }
+        public List<Modulo>? modules { get; set; }
+        public List<Pregunta>? questions { get; set; }
         [JsonIgnore]
         public bool Completed { get; set; }
         [JsonIgnore]
@@ -18,6 +18,7 @@ namespace PrimeraAPI.ObjectDto
         public int Percentage { get; set; }
         [JsonIgnore]
         public int Id_user { get; set; }
+        public string? Codigo { get; set; }
     }
 
     public class Modulo
@@ -51,5 +52,11 @@ namespace PrimeraAPI.ObjectDto
     {
         public int Id_user { get; set; }
         public string userRequest { get; set; }
+    }
+
+    public class User_Cursodto
+    {
+        public string? Codigo { get; set; }
+        public int Id_user { get; set; }
     }
 }
