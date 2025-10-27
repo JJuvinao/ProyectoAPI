@@ -1,17 +1,19 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using PrimeraAPI.Helpers;
 
 namespace PrimeraAPI.Controllers
 {
     public class AICourseController
     {
         private readonly HttpClient _httpClient;
+        KEY_API_IA KEY_API_IA = new KEY_API_IA();
         public AICourseController(HttpClient httpClient)
         {
             _httpClient = httpClient;
             _httpClient.Timeout = TimeSpan.FromSeconds(300);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", KEY_API_IA.KEY);
         }
 
         public async Task<string> GenerateCourseJson(string userRequest)
